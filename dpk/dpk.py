@@ -451,7 +451,7 @@ class Main(QMainWindow, design.Ui_MainWindow):
         elif self.passwordEdit_4.echoMode() == 0:
             self.passwordEdit_4.setEchoMode(2)
             self.repeatPasswordEdit.setEchoMode(2)
-            self.showPasswordButton_3.setIcon(QIcon('../icons/hidden.png'))
+            self.showPasswordButton_4.setIcon(QIcon('../icons/hidden.png'))
 
     def checkPasswordEdits(self, passwordText):
         if passwordText != self.repeatPasswordEdit.text():
