@@ -1,6 +1,6 @@
 DPK
 ---
-![Logo](https://github.com/denkus24/dpk/blob/main/icons/about_logo.png)
+<p align="center"><img src = "https://github.com/denkus24/dpk/blob/main/icons/about_logo.png"/></p>
 
  Tired of remembering too many <b>passwords</b>? Do you want to store them <b>safely and without risks</b>? Then <b>DPK</b> is the program that will help you with this, and <b>cross-platform</b> and <b>modern design</b> will improve your experience 
 
