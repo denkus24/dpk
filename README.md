@@ -34,7 +34,8 @@ python3 -m pip install -r requirements.txt
 ```
 Start the program
 ```
-python3 main.py
+cd dpk
+python3 dpk.py
 ```
 
 Bug report
