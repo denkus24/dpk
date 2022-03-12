@@ -4,8 +4,9 @@ from PyQt5.QtGui import QIcon
 from customKeyWidget import customKeyWidget
 from sys import argv
 from os import getcwd
-from database import (openDatabase, entriesByGroup, addNewEntry,
-                      removeEntry, changeParams, groupByName, addNewGroup, createNewFile)
+from databaseReader import (openDatabase, entriesByGroup, addNewEntry,
+                            removeEntry, changeParams, groupByName, addNewGroup, createNewFile)
+from recentFilesReader import readAllFiles, addNewFile
 from pykeepass.exceptions import CredentialsError
 import pyautogui as typer
 import design, about
@@ -31,8 +32,6 @@ class Main(QMainWindow, design.Ui_MainWindow):
         self.newButton.clicked.connect(self.createNewDatabase)
         self.addGroupButton.clicked.connect(self.addNewGroup)
         self.saveGroupButton.clicked.connect(self.addNewGroupMethod)
-
-        self.groupWidget.setCurrentRow(0)
 
         self.keysWidget.itemClicked.connect(self.infoPrint)
         self.groupWidget.itemClicked.connect(self.fillKeys)
@@ -62,9 +61,13 @@ class Main(QMainWindow, design.Ui_MainWindow):
         self.passwordEdit_4.textChanged.connect(self.checkPasswordEdits)
         self.repeatPasswordEdit.textChanged.connect(self.checkPasswordRepeatEdits)
 
-        ## OTHER
-        self.openedDatabase = ''
+        ## RECENTLY OPENED FILES
+        self.recentlyOpenedWidget.itemDoubleClicked.connect(self.openRecentlyDatabase)
+        self.updateRecentlyFiles()
 
+        ## OTHER
+
+        self.openedDatabase = ''
         self.lock()
 
     def removeKey(self):
@@ -142,6 +145,14 @@ class Main(QMainWindow, design.Ui_MainWindow):
         for x in add_elements:
             self.addNewEntry(x[0], x[1], x[2], x[3], x[4], x[5], x[6])
 
+    def updateRecentlyFiles(self):
+        self.recentlyOpenedWidget.clear()
+        self.recentFiles = readAllFiles()
+        if self.recentFiles is None:
+            pass
+        else:
+            self.recentlyOpenedWidget.addItems(self.recentFiles)
+
     def lock(self):
         self.setWindowTitle('DPK')
 
@@ -164,6 +175,8 @@ class Main(QMainWindow, design.Ui_MainWindow):
         self.update()
 
         self.openedDatabase = ''
+
+        self.updateRecentlyFiles()
 
         self.mainStackedWidget.setCurrentIndex(0)
 
@@ -264,6 +277,11 @@ class Main(QMainWindow, design.Ui_MainWindow):
     def openDatabase(self):
         self.openDatabasePageOpen()
 
+    def openRecentlyDatabase(self, item):
+        name = item.text()
+        self.databaseOpenName = name
+        self.openRecentlyDatabasePageOpen()
+
     def createNewDatabase(self):
         self.mainStackedWidget.setCurrentIndex(2)
 
@@ -338,6 +356,13 @@ class Main(QMainWindow, design.Ui_MainWindow):
             self.mainStackedWidget.setCurrentIndex(1)
             self.setWindowTitle('Opening new file')
 
+    def openRecentlyDatabasePageOpen(self):
+        if self.databaseOpenName:
+            self.passwordEdit_3.clear()
+            self.pathEdit.clear()
+            self.mainStackedWidget.setCurrentIndex(1)
+            self.setWindowTitle('Opening new file')
+
     def openDatabasePageOkMethod(self):
         if self.databaseOpenName:
             try:
@@ -356,6 +381,8 @@ class Main(QMainWindow, design.Ui_MainWindow):
                 self.unlock()
 
                 self.mainStackedWidget.setCurrentIndex(3)
+                addNewFile(self.databaseOpenName)
+                self.updateRecentlyFiles()
             except CredentialsError:
                 self.errorMessage.setText('Password is not correct!')
                 self.errorMessage.exec_()
@@ -441,6 +468,7 @@ class Main(QMainWindow, design.Ui_MainWindow):
         if self.databaseNewName:
             createNewFile(self.databaseNewName, self.titleEdit_3.text(), self.passwordEdit_4.text(),
                           self.pathEdit_2.text())
+            addNewFile(self.databaseNewName)
             self.openNewDatabase()
 
     def newDatabasePageShowPassword(self):
