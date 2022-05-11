@@ -29,6 +29,11 @@ def addNewGroup(keepassExam:PyKeePass, title, notes):
     keepassExam.add_group(destination_group=keepassExam.root_group, group_name=title, notes=notes)
     keepassExam.save()
 
+def removeGroup(keepassExam:PyKeePass, title):
+    group = groupByName(keepassExam, title)
+    keepassExam.delete_group(group)
+    keepassExam.save()
+
 def addNewEntry(keepassExam:PyKeePass, title, link, username, password, notes, group):
     entry = keepassExam.add_entry(group, title, username,password, link, notes)
     keepassExam.save()
