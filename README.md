@@ -23,6 +23,8 @@ Download the built program image from the <a href="https://github.com/denkus24/d
 
 Linux
 -----
+Download the built program image from the <a href="https://github.com/denkus24/dpk/releases">releases</a> page or do these steps:
+
 Clone git repository 
 ```
 git clone https://github.com/denkus24/dpk.git
