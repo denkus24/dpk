@@ -30,7 +30,11 @@ git clone https://github.com/denkus24/dpk.git
 Build dependencies
 ```
 cd dpk
-python3 -m pip install -r requirements.txt
+sudo apt install python3
+sudo apt install python3-pip
+sudo apt install python3-pyqt5
+sudo apt install python3-tk python3-dev
+pip install -r requirements.txt
 ```
 Start the program
 ```
